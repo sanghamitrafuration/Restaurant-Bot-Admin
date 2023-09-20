@@ -44,7 +44,7 @@ export class AdminDataSourceImpl implements AdminDataSource {
   }
 
   async getAllAdmin(): Promise<any[]> {
-    const admin = await Admin.find();
-    return admin.map((admin) => admin.toObject()); // Convert to plain JavaScript objects before returning
+    const admins = await Admin.find();
+    return admins.map((admin) => admin.toObject()); // Convert to plain JavaScript objects before returning
   }
 }
