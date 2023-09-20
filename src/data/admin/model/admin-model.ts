@@ -1,5 +1,5 @@
 import { boolean } from 'joi';
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose from 'mongoose';
 
 const adminSchema = new mongoose.Schema({
   name: {
