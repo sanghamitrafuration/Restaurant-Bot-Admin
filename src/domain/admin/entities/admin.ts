@@ -5,7 +5,8 @@ export class AdminModel {
       public email: string = "",
       public password: string = "",
       public businessName: string = "",
-      public lastsubscription: string = "",
+      public subscriptiontaken: string = "",
+      public subscriptionend: string = "",
       public botrunning: boolean = false,
       public paymentHistory: object[] | undefined = []
     ) {}
@@ -19,7 +20,8 @@ export class AdminModel {
       public email: string = "",
       public password: string = "",
       public businessName: string = "",
-      public lastsubscription: string = "",
+      public subscriptiontaken: string = "",
+      public subscriptionend: string = "",
       public botrunning: boolean = false,
       public paymentHistory: object[] | undefined = [],
       public createdAt: string
@@ -55,10 +57,14 @@ export class AdminModel {
             adminData.businessName !== undefined
                 ? adminData.businessName
                 : existingAdmin.businessName,
-            lastsubscription:
-            adminData.lastsubscription !== undefined
-                ? adminData.lastsubscription
-                : existingAdmin.lastsubscription,
+            subscriptiontaken:
+            adminData.subscriptiontaken !== undefined
+                ? adminData.subscriptiontaken
+                : existingAdmin.subscriptiontaken,
+            subscriptionend:
+            adminData.subscriptionend !== undefined
+                ? adminData.subscriptionend
+                : existingAdmin.subscriptionend,
             botrunning:
             adminData.botrunning !== undefined
                 ? adminData.botrunning
@@ -84,7 +90,8 @@ export class AdminModel {
             email: adminData.email,
             password: adminData.password,
             businessName: adminData.businessName,
-            lastsubscription: adminData.lastsubscription,
+            subscriptiontaken: adminData.subscriptiontaken,
+            subscriptionend: adminData.subscriptionend,
             botrunning: adminData.botrunning,
             paymentHistory: adminData.paymentHistory,
             createdAt: adminData.createdAt
@@ -99,7 +106,7 @@ export class AdminModel {
           email: admin.email,
           password: admin.password,
           businessName: admin.businessName,
-          lastsubscription: admin.lastsubscription,
+          subscriptiontaken: admin.subscriptiontaken,
           botrunning: admin.botrunning,
           paymentHistory: admin.paymentHistory
         };

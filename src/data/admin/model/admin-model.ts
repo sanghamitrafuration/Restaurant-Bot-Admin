@@ -22,7 +22,11 @@ const adminSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  lastsubscription: {
+  subscriptiontaken: {
+    type: String,
+    default: ""
+  },
+  subscriptionend: {
     type: String,
     default: ""
   },
