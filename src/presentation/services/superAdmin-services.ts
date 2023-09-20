@@ -6,6 +6,8 @@ import { GetSuperAdminByIdUsecase } from "@domain/superAdmin/usecases/get-superA
 import { GetAllSuperAdminsUsecase } from "@domain/superAdmin/usecases/get-all-superAdmin";
 import { UpdateSuperAdminUsecase } from "@domain/superAdmin/usecases/update-superAdmin";
 import { SuperAdminEntity, SuperAdminMapper, SuperAdminModel } from "@domain/superAdmin/entities/superAdmin";
+const bcrypt= require("bcrypt");
+require("dotenv").config();
 
 export class SuperAdminServices {
   private readonly createSuperAdminUsecases: CreateSuperAdminUsecase;
@@ -30,15 +32,18 @@ export class SuperAdminServices {
 
   async createSuperAdmin(req: Request, res: Response): Promise<void> {
     try {
-      const superAdminData: SuperAdminModel = SuperAdminMapper.toModel(req.body);
+      const data= req.body;
+      const hash = bcrypt.hashSync(data.password, process.env.saltRound);
+
+      const superAdminData: SuperAdminModel = SuperAdminMapper.toModel({...data, password:hash});
 
       // Call the CreateSuperAdminUsecase to create the superAdmin
-      const newSuperAdmin: SuperAdminEntity =
-        await this.createSuperAdminUsecases.execute(superAdminData);
+      const newSuperAdmin: SuperAdminEntity = await this.createSuperAdminUsecases.execute(superAdminData);
 
       const responseData = SuperAdminMapper.toEntity(newSuperAdmin, true);
 
       res.json(responseData);
+
     } catch (error) {
       if (error instanceof ApiError) {
         res.status(error.status).json({ error: error.message });

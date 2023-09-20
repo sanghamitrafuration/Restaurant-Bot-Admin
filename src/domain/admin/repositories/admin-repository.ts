@@ -3,6 +3,7 @@ import { AdminEntity, AdminModel } from "../entities/admin";
 
 export interface AdminRepository {
   createAdmin(admin: AdminModel): Promise<AdminEntity>;
+  loginAdmin(data: AdminModel): Promise<AdminEntity>;
   deleteAdmin(id: string): Promise<void>;
   getAdmins(): Promise<AdminEntity[]>;
   getAdminById(id: string): Promise<AdminEntity | null>;

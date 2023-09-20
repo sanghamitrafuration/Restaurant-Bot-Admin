@@ -6,6 +6,8 @@ import { GetAdminByIdUsecase } from "@domain/admin/usecases/get-admin-by-id";
 import { GetAllAdminsUsecase } from "@domain/admin/usecases/get-all-admins";
 import { UpdateAdminUsecase } from "@domain/admin/usecases/update-admin";
 import { AdminEntity, AdminMapper, AdminModel } from "@domain/admin/entities/admin";
+const bcrypt= require("bcrypt");
+require("dotenv").config();
 
 export class AdminServices {
   private readonly createAdminUsecases: CreateAdminUsecase;
@@ -30,15 +32,17 @@ export class AdminServices {
 
   async createAdmin(req: Request, res: Response): Promise<void> {
     try {
-      const adminData: AdminModel = AdminMapper.toModel(req.body);
+
+      const data= req.body;
+      const hash = bcrypt.hashSync(data.password, process.env.saltRound);
+      const adminData: AdminModel = AdminMapper.toModel({...data, password:hash});
 
       // Call the CreateAdminUsecase to create the admin
-      const newAdmin: AdminEntity =
-        await this.createAdminUsecases.execute(adminData);
-
+      const newAdmin: AdminEntity = await this.createAdminUsecases.execute(adminData);
       const responseData = AdminMapper.toEntity(newAdmin, true);
 
       res.json(responseData);
+
     } catch (error) {
       if (error instanceof ApiError) {
         res.status(error.status).json({ error: error.message });
