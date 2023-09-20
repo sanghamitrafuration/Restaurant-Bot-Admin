@@ -3,6 +3,7 @@ export class AdminModel {
       public name: string = "",
       public phone: number = 0,
       public email: string = "",
+      public password: string = "",
       public businessName: string = "",
       public lastsubscription: string = "",
       public botrunning: boolean = false,
@@ -16,6 +17,7 @@ export class AdminModel {
       public name: string = "",
       public phone: number = 0,
       public email: string = "",
+      public password: string = "",
       public businessName: string = "",
       public lastsubscription: string = "",
       public botrunning: boolean = false,
@@ -45,6 +47,10 @@ export class AdminModel {
             adminData.email !== undefined
                 ? adminData.email
                 : existingAdmin.email,
+            password:
+            adminData.password !== undefined
+                ? adminData.password
+                : existingAdmin.password,
             businessName:
             adminData.businessName !== undefined
                 ? adminData.businessName
@@ -76,6 +82,7 @@ export class AdminModel {
             name: adminData.name,
             phone: adminData.phone,
             email: adminData.email,
+            password: adminData.password,
             businessName: adminData.businessName,
             lastsubscription: adminData.lastsubscription,
             botrunning: adminData.botrunning,
@@ -90,6 +97,7 @@ export class AdminModel {
           name: admin.name,
           phone: admin.phone,
           email: admin.email,
+          password: admin.password,
           businessName: admin.businessName,
           lastsubscription: admin.lastsubscription,
           botrunning: admin.botrunning,

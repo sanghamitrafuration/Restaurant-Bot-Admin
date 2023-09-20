@@ -14,6 +14,10 @@ const adminSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  password: {
+    type: String,
+    required: true
+  },
   businessName: {
     type: String,
     required: true
