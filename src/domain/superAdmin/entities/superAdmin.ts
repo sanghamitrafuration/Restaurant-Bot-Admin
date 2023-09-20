@@ -3,10 +3,7 @@ export class SuperAdminModel {
       public name: string = "",
       public phone: number = 0,
       public email: string = "",
-      public businessName: string = "",
-      public lastsubscription: string = "",
-      public botrunning: boolean = false,
-      public paymentHistory: object[] | undefined = []
+      public password: string = ""
     ) {}
   }
   
@@ -16,10 +13,7 @@ export class SuperAdminModel {
       public name: string = "",
       public phone: number = 0,
       public email: string = "",
-      public businessName: string = "",
-      public lastsubscription: string = "",
-      public botrunning: boolean = false,
-      public paymentHistory: object[] | undefined = [],
+      public password: string = "",
       public createdAt: string
     ) {}
   }
@@ -45,22 +39,10 @@ export class SuperAdminModel {
             superAdminData.email !== undefined
                 ? superAdminData.email
                 : existingSuperAdmin.email,
-            businessName:
-            superAdminData.businessName !== undefined
-                ? superAdminData.businessName
-                : existingSuperAdmin.businessName,
-            lastsubscription:
-            superAdminData.lastsubscription !== undefined
-                ? superAdminData.lastsubscription
-                : existingSuperAdmin.lastsubscription,
-            botrunning:
-            superAdminData.botrunning !== undefined
-                ? superAdminData.botrunning
-                : existingSuperAdmin.botrunning,
-            paymentHistory:
-            superAdminData.paymentHistory !== undefined
-                ? superAdminData.paymentHistory
-                : existingSuperAdmin.paymentHistory,
+            password:
+            superAdminData.password !== undefined
+                ? superAdminData.password
+                : existingSuperAdmin.password,
             createdAt:
             superAdminData.createdAt !== undefined
                 ? superAdminData.createdAt
@@ -76,10 +58,7 @@ export class SuperAdminModel {
             name: superAdminData.name,
             phone: superAdminData.phone,
             email: superAdminData.email,
-            businessName: superAdminData.businessName,
-            lastsubscription: superAdminData.lastsubscription,
-            botrunning: superAdminData.botrunning,
-            paymentHistory: superAdminData.paymentHistory,
+            password: superAdminData.password,
             createdAt: superAdminData.createdAt
           };
           return superAdminEntity;
@@ -90,10 +69,7 @@ export class SuperAdminModel {
           name: superAdmin.name,
           phone: superAdmin.phone,
           email: superAdmin.email,
-          businessName: superAdmin.businessName,
-          lastsubscription: superAdmin.lastsubscription,
-          botrunning: superAdmin.botrunning,
-          paymentHistory: superAdmin.paymentHistory
+          password: superAdmin.password,
         };
       }
 }

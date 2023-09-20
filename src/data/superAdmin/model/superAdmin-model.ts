@@ -13,24 +13,10 @@ const superAdminSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  businessName: {
+  password: {
     type: String,
     required: true
-  },
-  lastsubscription: {
-    type: String,
-    default: ""
-  },
-  botrunning: {
-    type: Boolean,
-    default: false
-  },
-  paymentHistory : [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Payment",
-    },
-  ]
+  }
 });
 
 const SuperAdmin = mongoose.model('SuperAdmin', superAdminSchema);
