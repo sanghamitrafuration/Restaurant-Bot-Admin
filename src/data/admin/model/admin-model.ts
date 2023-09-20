@@ -1,4 +1,3 @@
-import { boolean } from 'joi';
 import mongoose from 'mongoose';
 
 const adminSchema = new mongoose.Schema({
@@ -31,7 +30,7 @@ const adminSchema = new mongoose.Schema({
     default: ""
   },
   botrunning: {
-    type: boolean,
+    type: Boolean,
     default: false
   },
   paymentHistory : [
@@ -39,7 +38,11 @@ const adminSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Payment",
     },
-  ]
+  ],
+  createdAt : {
+    type: Date,
+    default: Date.now()
+  }
 });
 
 const Admin = mongoose.model('Admin', adminSchema);
