@@ -1,0 +1,12 @@
+
+node_modules
+public
+**/**/node_modules
+
+*.lock
+*.log
+*.spec.ts
+
+.gitignore
+.prettierignore
+.eslintignore
