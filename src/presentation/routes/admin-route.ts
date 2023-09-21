@@ -30,7 +30,7 @@ const adminService = new AdminServices(
 // Create an Express router
 export const adminRouter = Router();
 
-adminRouter.post("/new", adminService.createAdmin.bind(adminService));
+adminRouter.post("/register", adminService.createAdmin.bind(adminService));
 
 adminRouter.get(
   "/:id",

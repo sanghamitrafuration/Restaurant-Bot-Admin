@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import ApiError from "@presentation/error-handling/api-error";
 import Admin from "../model/admin-model";
 import { AdminModel } from "@domain/admin/entities/admin";
+import User from "@data/user/model/user-model";
 
 //Create AdminDataSourse Interface
 export interface AdminDataSource {
@@ -16,7 +17,11 @@ export interface AdminDataSource {
 export class AdminDataSourceImpl implements AdminDataSource {
   constructor(private db: mongoose.Connection) {}
   async create(admin: AdminModel): Promise<any> {
-    const existingAdmin = await Admin.findOne({ phone: admin.phone });
+    const existingUser = await User.findOne({ _id: admin.userId });
+    if (!existingUser) {
+      throw ApiError.emailExist();
+    }
+    const existingAdmin = await User.findOne({ phone: existingUser?.phone });
     if (existingAdmin) {
       throw ApiError.emailExist();
     }
@@ -25,15 +30,6 @@ export class AdminDataSourceImpl implements AdminDataSource {
     const createdAdmin = await adminData.save();
 
     return createdAdmin.toObject();
-  }
-
-  async loginAdmin(data: AdminModel): Promise<any> {
-    const existingAdmin = await Admin.findOne({ phone: data.phone });
-    if (!existingAdmin) {
-      // throw ApiError.emailExist();
-    }
-    const admins = await Admin.find();
-    return admins.map((admin) => admin.toObject()); // Convert to plain JavaScript objects before returning
   }
 
   async update(id: string, admin: AdminModel): Promise<any> {

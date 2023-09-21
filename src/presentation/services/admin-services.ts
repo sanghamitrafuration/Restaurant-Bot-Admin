@@ -24,10 +24,10 @@ export class AdminServices {
     updateAdminUsecases: UpdateAdminUsecase
   ) {
     (this.createAdminUsecases = createAdminUsecases),
-      (this.deleteAdminUsecases = deleteAdminUsecases),
-      (this.getAdminByIdUsecases = getAdminByIdUsecases),
-      (this.getAllAdminsUsecases = getAllAdminsUsecases),
-      (this.updateAdminUsecases = updateAdminUsecases);
+    (this.deleteAdminUsecases = deleteAdminUsecases),
+    (this.getAdminByIdUsecases = getAdminByIdUsecases),
+    (this.getAllAdminsUsecases = getAllAdminsUsecases),
+    (this.updateAdminUsecases = updateAdminUsecases);
   }
 
   async createAdmin(req: Request, res: Response): Promise<void> {

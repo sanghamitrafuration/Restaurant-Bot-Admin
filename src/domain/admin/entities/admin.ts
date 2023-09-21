@@ -1,9 +1,6 @@
 export class AdminModel {
     constructor(
-      public name: string = "",
-      public phone: number = 0,
-      public email: string = "",
-      public password: string = "",
+      public userId: string = "",
       public businessName: string = "",
       public subscriptiontaken: string = "",
       public subscriptionend: string = "",
@@ -15,10 +12,7 @@ export class AdminModel {
   export class AdminEntity {
     constructor(
       public id: string | undefined = undefined,
-      public name: string = "",
-      public phone: number = 0,
-      public email: string = "",
-      public password: string = "",
+      public userId: string = "",
       public businessName: string = "",
       public subscriptiontaken: string = "",
       public subscriptionend: string = "",
@@ -37,22 +31,10 @@ export class AdminModel {
         if (existingAdmin != null) {
           return {
             ...existingAdmin,
-            name:
-            adminData.name !== undefined
-                ? adminData.name
-                : existingAdmin.name,
-            phone:
-            adminData.phone !== undefined
-                ? adminData.phone
-                : existingAdmin.phone,
-            email:
-            adminData.email !== undefined
-                ? adminData.email
-                : existingAdmin.email,
-            password:
-            adminData.password !== undefined
-                ? adminData.password
-                : existingAdmin.password,
+            userId:
+            adminData.userId !== undefined
+                ? adminData.userId
+                : existingAdmin.userId,
             businessName:
             adminData.businessName !== undefined
                 ? adminData.businessName
@@ -85,10 +67,7 @@ export class AdminModel {
                 ? adminData._id.toString()
                 : undefined
               : undefined,
-            name: adminData.name,
-            phone: adminData.phone,
-            email: adminData.email,
-            password: adminData.password,
+            userId: adminData.userId,
             businessName: adminData.businessName,
             subscriptiontaken: adminData.subscriptiontaken,
             subscriptionend: adminData.subscriptionend,
@@ -101,12 +80,10 @@ export class AdminModel {
       }
     static toModel(admin: AdminEntity): any {
         return {
-          name: admin.name,
-          phone: admin.phone,
-          email: admin.email,
-          password: admin.password,
+          userId: admin.userId,
           businessName: admin.businessName,
           subscriptiontaken: admin.subscriptiontaken,
+          subscriptionend: admin.subscriptionend,
           botrunning: admin.botrunning,
           paymentHistory: admin.paymentHistory
         };

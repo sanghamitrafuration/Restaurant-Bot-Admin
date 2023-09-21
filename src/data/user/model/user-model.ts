@@ -1,6 +1,6 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose from 'mongoose';
 
-const superAdminSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -17,12 +17,17 @@ const superAdminSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  role: {
+    type: String,
+    required: true,
+    default: "admin"
+  },
   createdAt : {
     type: Date,
     default: Date.now()
   }
 });
 
-const SuperAdmin = mongoose.model('SuperAdmin', superAdminSchema);
+const User = mongoose.model('User', userSchema);
 
-export default SuperAdmin;
+export default User;
