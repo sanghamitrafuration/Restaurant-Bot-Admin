@@ -8,7 +8,6 @@ import { UpdateUserUsecase } from "@domain/user/usecases/update-user";
 import { UserEntity, UserMapper, UserModel } from "@domain/user/entities/user";
 import { LoginUserUsecase } from "@domain/user/usecases/login-user";
 const bcrypt= require("bcrypt");
-require("dotenv").config();
 const jwt= require("jsonwebtoken");
 
 export class UserServices {

@@ -18,6 +18,4 @@ const validator= ( next: NextFunction, req: Request, res: Response)=>{
     }
 }
 
-module.exports= {
-    validator
-}
+export default validator;

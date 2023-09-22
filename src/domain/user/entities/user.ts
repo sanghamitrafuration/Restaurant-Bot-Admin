@@ -1,7 +1,7 @@
 export class UserModel {
     constructor(
       public name: string = "",
-      public phone: number = 0,
+      public phone: string = "",
       public email: string = "",
       public password: string = "",
       public role: string = ""
@@ -12,7 +12,7 @@ export class UserModel {
     constructor(
       public id: string | undefined = undefined,
       public name: string = "",
-      public phone: number = 0,
+      public phone: string = "",
       public email: string = "",
       public password: string = "",
       public role: string = "",

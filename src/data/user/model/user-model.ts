@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   phone: {
-    type: Number,
+    type: String,
     required: true
   },
   email: {
@@ -19,8 +19,9 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
+    enum: ["admin", "superadmin", "user"],
     required: true,
-    default: "admin"
+    default: "user"
   },
   createdAt : {
     type: Date,

@@ -17,7 +17,7 @@ export interface UserDataSource {
 export class UserDataSourceImpl implements UserDataSource {
   constructor(private db: mongoose.Connection) {}
   async create(user: UserModel): Promise<any> {
-    const existingUser = await User.findOne({ email: user.email });
+    const existingUser = await User.findOne({ phone: user.phone });
     if (existingUser) {
       throw ApiError.emailExist();
     }
