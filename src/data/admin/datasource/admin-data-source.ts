@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 import ApiError from "@presentation/error-handling/api-error";
-import Admin from "../model/admin-model";
 import { AdminModel } from "@domain/admin/entities/admin";
-import User from "@data/user/model/user-model";
+import Admin from "../model/admin-model";
 
 //Create AdminDataSourse Interface
 export interface AdminDataSource {
@@ -17,11 +16,7 @@ export interface AdminDataSource {
 export class AdminDataSourceImpl implements AdminDataSource {
   constructor(private db: mongoose.Connection) {}
   async create(admin: AdminModel): Promise<any> {
-    const existingUser = await User.findOne({ _id: admin.userId });
-    if (!existingUser) {
-      throw ApiError.emailExist();
-    }
-    const existingAdmin = await User.findOne({ phone: existingUser?.phone });
+    const existingAdmin = await Admin.findOne({ userId: admin.userId });
     if (existingAdmin) {
       throw ApiError.emailExist();
     }

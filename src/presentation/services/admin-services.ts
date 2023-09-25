@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import ApiError from "@presentation/error-handling/api-error";
+import { Either } from "monet";
+import ErrorClass from "@presentation/error-handling/api-error";
+import env from "@main/config/env";
 import { CreateAdminUsecase } from "@domain/admin/usecases/create-admin";
 import { DeleteAdminUsecase } from "@domain/admin/usecases/delete-admin";
 import { GetAdminByIdUsecase } from "@domain/admin/usecases/get-admin-by-id";
@@ -7,7 +10,7 @@ import { GetAllAdminsUsecase } from "@domain/admin/usecases/get-all-admins";
 import { UpdateAdminUsecase } from "@domain/admin/usecases/update-admin";
 import { AdminEntity, AdminMapper, AdminModel } from "@domain/admin/entities/admin";
 const bcrypt= require("bcrypt");
-require("dotenv").config();
+const jwt= require("jsonwebtoken");
 
 export class AdminServices {
   private readonly createAdminUsecases: CreateAdminUsecase;
@@ -31,124 +34,97 @@ export class AdminServices {
   }
 
   async createAdmin(req: Request, res: Response): Promise<void> {
-    try {
+    const adminData: AdminModel = AdminMapper.toModel(req.body);
 
-      const data= req.body;
-      const hash = bcrypt.hashSync(data.password, process.env.saltRound);
-      const adminData: AdminModel = AdminMapper.toModel({...data, password:hash});
+    const newAdminData: Either<ErrorClass, AdminEntity> = 
+      await this.createAdminUsecases.execute(adminData);
 
-      // Call the CreateAdminUsecase to create the admin
-      const newAdmin: AdminEntity = await this.createAdminUsecases.execute(adminData);
-      const responseData = AdminMapper.toEntity(newAdmin, true);
-
-      res.json(responseData);
-
-    } catch (error) {
-      if (error instanceof ApiError) {
-        res.status(error.status).json({ error: error.message });
+      newAdminData.cata(
+      (error : ErrorClass) =>
+      res.status(error.status).json({error : error.message}),
+      (result : AdminEntity) => {
+        const responseData = AdminMapper.toEntity(result, true);
+        return res.json(responseData);
       }
-
-      const err = ApiError.internalError();
-      res.status(err.status).json(err.message);
-    }
+    )
   }
 
   async deleteAdmin(req: Request, res: Response): Promise<void> {
-    try {
-      const id: string = req.params.id;
-
-      await this.deleteAdminUsecases.execute(id);
-
-      res.json({ message: "Admin deleted successfully." });
-    } catch (error) {
-      if (error instanceof ApiError) {
-        res.status(error.status).json({ error: error.message });
+    const id : string= req.params.id;
+    const deletedAdmin: Either<ErrorClass, void> =
+    await this.deleteAdminUsecases.execute(id);
+    
+    deletedAdmin.cata(
+      (error: ErrorClass) =>
+      res.status(error.status).json({ error: error.message }),
+      (result: void) => {
+        return res.json({ message: "Admin deleted successfully." });
       }
-      const err = ApiError.internalError();
-      res.status(err.status).json(err.message);
-    }
+    );
   }
 
   async getAdminById(req: Request, res: Response): Promise<void> {
-    try {
-      const id: string = req.params.id;
-
-      const admin: AdminEntity | null =
-        await this.getAdminByIdUsecases.execute(id);
-
-      if (admin) {
-        const responseData = AdminMapper.toModel(admin);
-
-        res.json(responseData);
-      } else {
-        ApiError.notFound();
+    const id : string = req.params.id;
+    const admin : Either<ErrorClass, AdminEntity> = 
+    await this.getAdminByIdUsecases.execute(id);
+    admin.cata(
+      (error: ErrorClass) =>
+      res.status(error.status).json({ error: error.message }),
+      (result: AdminEntity) => {
+        const resdata = AdminMapper.toModel(result);
+        return res.json(resdata);
       }
-    } catch (error) {
-      if (error instanceof ApiError) {
-        res.status(error.status).json({ error: error.message });
-      }
-
-      const err = ApiError.internalError();
-      res.status(err.status).json(err.message);
-    }
+    );
   }
 
-  async getAllAdmins(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    try {
-      const admins: AdminEntity[] =
-        await this.getAllAdminsUsecases.execute();
-
-      const responseData = admins.map((admin) =>
-      AdminMapper.toModel(admin)
-      );
-
-      res.json(responseData);
-    } catch (error) {
-      if (error instanceof ApiError) {
-        res.status(error.status).json({ error: error.message });
-      }
-      const err = ApiError.internalError();
-      res.status(err.status).json(err.message);
-    }
+  async getAllAdmins (req: Request, res: Response) : Promise<void> {
+    const admins : Either<ErrorClass, AdminEntity[]> = await this.getAllAdminsUsecases.execute();
+    admins.cata(
+        (error: ErrorClass) =>
+            res.status(error.status).json({ error: error.message }),
+        (result: AdminEntity[]) => {
+            const resdata = result.map((admin) =>
+            AdminMapper.toModel(admin)
+          );
+          return res.json(resdata);
+        }
+    )
   }
 
   async updateAdmin(req: Request, res: Response): Promise<void> {
-    try {
-      const id: string = req.params.id;
-      const adminData: AdminModel = req.body;
-
-      const existingAdmin: AdminEntity | null =
-        await this.getAdminByIdUsecases.execute(id);
-
-      if (!existingAdmin) {
-        ApiError.notFound();
-        return;
-      }
-
-      const updatedAdminEntity: AdminEntity = AdminMapper.toEntity(
-        adminData,
-        true,
-        existingAdmin
-      );
-
-      const updatedAdmin: AdminEntity =
+    const id: string = req.params.id;
+    const adminData: AdminModel = req.body;
+    
+    const existingAdmin: Either<ErrorClass, AdminEntity> =
+    await this.getAdminByIdUsecases.execute(id);
+    
+    existingAdmin.cata(
+      (error: ErrorClass) => {
+        res.status(error.status).json({ error: error.message });
+      },
+      async (existingAdminData: AdminEntity) => {
+        const updatedAdminEntity: AdminEntity = AdminMapper.toEntity(
+          adminData,
+          true,
+          existingAdminData
+        );
+        
+        const updatedAdmin: Either<ErrorClass, AdminEntity> =
         await this.updateAdminUsecases.execute(
-        id,
+          id,
           updatedAdminEntity
         );
-
-      const responseData = AdminMapper.toModel(updatedAdmin);
-
-      res.json(responseData);
-    } catch (error) {
-      if (error instanceof ApiError) {
-        res.status(error.status).json({ error: error.message });
+        
+        updatedAdmin.cata(
+          (error: ErrorClass) => {
+                res.status(error.status).json({ error: error.message });
+          },
+          (result: AdminEntity) => {
+            const resData = AdminMapper.toEntity(result, true);
+            res.json(resData);
+          }
+        );
       }
-      ApiError.internalError();
-    }
+    );
   }
 }
