@@ -18,6 +18,7 @@ export class UserDataSourceImpl implements UserDataSource {
   constructor(private db: mongoose.Connection) {}
   async create(user: UserModel): Promise<any> {
     const existingUser = await User.findOne({ phone: user.phone });
+    console.log({"existingUser" : existingUser});
     if (existingUser) {
       throw ApiError.emailExist();
     }
@@ -29,7 +30,7 @@ export class UserDataSourceImpl implements UserDataSource {
   }
 
   async loginUser(data: UserModel): Promise<any> {
-    const existingUser = await User.findOne({ phone: data.phone });
+    const existingUser = await User.findOne({ phone: data.phone }).select('+password');
     return existingUser ? existingUser.toObject() : null;
   }
 

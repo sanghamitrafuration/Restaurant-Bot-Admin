@@ -1,8 +1,10 @@
 import { UserEntity } from "../entities/user";
 import { UserRepository } from "../repositories/user-repository";
+import { Either } from "monet";
+import ErrorClass from "@presentation/error-handling/api-error";
 
 export interface GetAllUsersUsecase {
-  execute: () => Promise<UserEntity[]>;
+  execute: () => Promise<Either<ErrorClass, UserEntity[]>>;
 }
 
 export class GetAllUsers implements GetAllUsersUsecase {
@@ -11,7 +13,7 @@ export class GetAllUsers implements GetAllUsersUsecase {
     this.userRepository = userRepository;
   }
 
-  async execute(): Promise<UserEntity[]> {
+  async execute(): Promise<Either<ErrorClass, UserEntity[]>> {
     return await this.userRepository.getUsers();
   }
 }
