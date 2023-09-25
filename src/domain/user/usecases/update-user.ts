@@ -8,7 +8,7 @@ export interface UpdateUserUsecase {
     execute : (id : string, data: UserModel) => Promise<Either<ErrorClass, UserEntity>>
 }
 
-export class UpdateDeliverypartner implements UpdateUserUsecase {
+export class UpdateUser implements UpdateUserUsecase {
     
     private readonly userRepository : UserRepository
 

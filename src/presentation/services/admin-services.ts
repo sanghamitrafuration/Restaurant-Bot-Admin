@@ -145,7 +145,6 @@ export class AdminServices {
 
       res.json(responseData);
     } catch (error) {
-      console.log(error);
       if (error instanceof ApiError) {
         res.status(error.status).json({ error: error.message });
       }

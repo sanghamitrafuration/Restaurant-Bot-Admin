@@ -9,6 +9,7 @@ import { LoginUserUsecase } from "@domain/user/usecases/login-user";
 import ApiError from "@presentation/error-handling/api-error";
 import { Either } from "monet";
 import ErrorClass from "@presentation/error-handling/api-error";
+import env from "@main/config/env";
 const bcrypt= require("bcrypt");
 const jwt= require("jsonwebtoken");
 
@@ -38,7 +39,7 @@ export class UserServices {
 
   async createUser(req: Request, res: Response): Promise<void> {
     const data= req.body;
-    const hash = bcrypt.hashSync(data.password, process.env.saltRound);
+    const hash = bcrypt.hashSync(data.password, env.saltRound);
     const userData: UserModel = UserMapper.toModel({...data, password:hash});
 
     const newUserData: Either<ErrorClass, UserEntity> = 
@@ -55,70 +56,26 @@ export class UserServices {
   }
 
   async loginUser(req: Request, res: Response): Promise<void> {
-    const userData: UserModel = req.body;
+    const {phone, password} = req.body;
     
-    const existingUser: Either<ErrorClass, UserEntity> =
-    await this.loginUserUsecases.execute(userData);
-
-    // const existingPassword= existingUser?.password;
+    const existingUser: Either<ErrorClass, any> =
+    await this.loginUserUsecases.execute(phone, password);
     
     existingUser.cata(
       (error: ErrorClass) => {
         res.status(error.status).json({ error: error.message });
       },
       async (result: any) => {
-        if (!existingUser) {
-          // ApiError.notFound();
-          // return;
-          res.send({"error" : "Not registered"})
-        }else {
-          const isMatch= await result.matchPassword(userData.password);
+          const isMatch= await result.matchPassword(password);
           if(isMatch){
-            const token= jwt.sign( {phone : userData.phone, userId: result.id}, process.env.secret_key);
+            const token= jwt.sign( {phone , userId: result.id}, env.secret_key);
             res.json({ message: "Successfully Logged in" , token});
           }else {
             ApiError.notFound();
             return;
           }
-          // const result= bcrypt.compareSync(existingPassword, userData.password);
-          // if(result){
-          //   const token= jwt.sign( {phone : userData.phone, userId: existingUser.id}, process.env.secret_key);
-          //   res.json({ message: "Successfully Logged in" , token});
-          // }else {
-          //   // ApiError.notFound();
-          //   // return;
-          // }
-        }
       }
     );
-  // }
-  //   try {
-  //     const userData: UserModel = UserMapper.toModel(req.body);
-
-  //     const existingUser: UserEntity | null =
-  //       await this.loginUserUsecases.execute(userData);
-
-  //     if (!existingUser) {
-  //       // ApiError.notFound();
-  //       // return;
-  //       res.send({"error" : "Not registered"})
-  //     }else {
-  //       const result= bcrypt.compareSync(existingUser.password, userData.password);
-  //       if(result){
-  //         const token= jwt.sign( {phone : userData.phone, userId: existingUser.id}, process.env.secret_key);
-  //         res.json({ message: "Successfully Logged in" , token});
-  //       }else {
-  //         // ApiError.notFound();
-  //         // return;
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     if (error instanceof ApiError) {
-  //       res.status(error.status).json({ error: error.message });
-  //     }
-  //     ApiError.internalError();
-  //   }
   }
 
   async deleteUser(req: Request, res: Response): Promise<void> {

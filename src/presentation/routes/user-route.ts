@@ -6,9 +6,9 @@ import { CreateUser } from "@domain/user/usecases/create-user";
 import { DeleteUser } from "@domain/user/usecases/delete-user";
 import { GetUserById } from "@domain/user/usecases/get-user-by-id";
 import { GetAllUsers } from "@domain/user/usecases/get-all-user";
-import { UpdateUser } from "@domain/user/usecases/update-user";
 import { UserServices } from "@presentation/services/user-services";
 import { LoginUser } from "@domain/user/usecases/login-user";
+import { UpdateUser } from "@domain/user/usecases/update-user";
 
 const userDataSource = new UserDataSourceImpl(mongoose.connection);
 
@@ -18,16 +18,16 @@ const createUserUsecase = new CreateUser(userRepository);
 const loginUserUsecase = new LoginUser(userRepository);
 const deleteUserUsecase = new DeleteUser(userRepository);
 const getUserByIdUsecases = new GetUserById(userRepository);
-const getAllUsers = new GetAllUsers(userRepository);
-const updateUser = new UpdateUser(userRepository);
+const getAllUsersUsecase = new GetAllUsers(userRepository);
+const updateUserUsecase = new UpdateUser(userRepository);
 
 const userService = new UserServices(
   createUserUsecase,
   loginUserUsecase,
   deleteUserUsecase,
   getUserByIdUsecases,
-  getAllUsers,
-  updateUser
+  getAllUsersUsecase,
+  updateUserUsecase
 );
 
 // Create an Express router

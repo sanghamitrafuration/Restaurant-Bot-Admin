@@ -4,7 +4,7 @@ import { Either } from "monet";
 import ErrorClass from "@presentation/error-handling/api-error";
 
 export interface LoginUserUsecase {
-  execute: (userData:  UserModel) => Promise<Either<ErrorClass, UserEntity>>;
+  execute: (phone:  string, password: string) => Promise<Either<ErrorClass, UserEntity>>;
 }
 
 export class LoginUser implements LoginUserUsecase {
@@ -14,7 +14,7 @@ export class LoginUser implements LoginUserUsecase {
     this.userRepository = userRepository;
   }
 
-  async execute(userData: UserModel): Promise<Either<ErrorClass, UserEntity>> {
-    return await this.userRepository.loginUser(userData);
+  async execute(phone: string, password: string): Promise<Either<ErrorClass, UserEntity>> {
+    return await this.userRepository.loginUser(phone, password);
   }
 }

@@ -6,7 +6,7 @@ import { UserModel } from "@domain/user/entities/user";
 //Create UserDataSourse Interface
 export interface UserDataSource {
   create(user: UserModel): Promise<any>;
-  loginUser(user: UserModel): Promise<any>;
+  loginUser(phone: string, password: string): Promise<any>;
   update(id: String, user: UserModel): Promise<any>;
   delete(id: string): Promise<void>;
   read(id: string): Promise<any | null>;
@@ -18,7 +18,6 @@ export class UserDataSourceImpl implements UserDataSource {
   constructor(private db: mongoose.Connection) {}
   async create(user: UserModel): Promise<any> {
     const existingUser = await User.findOne({ phone: user.phone });
-    console.log({"existingUser" : existingUser});
     if (existingUser) {
       throw ApiError.emailExist();
     }
@@ -29,9 +28,12 @@ export class UserDataSourceImpl implements UserDataSource {
     return createdUser.toObject();
   }
 
-  async loginUser(data: UserModel): Promise<any> {
-    const existingUser = await User.findOne({ phone: data.phone }).select('+password');
-    return existingUser ? existingUser.toObject() : null;
+  async loginUser(phone: string, password: string): Promise<any> {
+    const existingUser = await User.findOne({ phone }).select("+password");
+    if(!existingUser){
+      throw ApiError.userNotFound();
+    }
+    return existingUser;
   }
 
   async update(id: string, user: UserModel): Promise<any> {
