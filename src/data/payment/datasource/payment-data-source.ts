@@ -5,6 +5,7 @@ import Payment from "../model/payment-model";
 //Create PaymentDataSourse Interface
 export interface PaymentDataSource {
   create(payment: PaymentModel): Promise<any>;
+  update(id: String, payment: PaymentModel): Promise<any>;
   read(id: string): Promise<any | null>;
   getAllPayment(): Promise<any[]>;
   getAllPaymentByAdminId(adminId: string): Promise<any[]>;
@@ -19,6 +20,13 @@ export class PaymentDataSourceImpl implements PaymentDataSource {
     const createdPayment = await paymentData.save();
 
     return createdPayment.toObject();
+  }
+
+  async update(id: string, payment: PaymentModel): Promise<any> {
+    const updatedPayment = await Payment.findByIdAndUpdate(id, payment, {
+      new: true,
+    }); // No need for conversion here
+    return updatedPayment ? updatedPayment.toObject() : null; // Convert to plain JavaScript object before returning
   }
 
   async read(id: string): Promise<any | null> {

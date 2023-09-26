@@ -8,4 +8,5 @@ export interface PaymentRepository {
   getPayments(): Promise<Either<ErrorClass, PaymentEntity[]>>;
   getPaymentsByAdminId(adminId: string): Promise<Either<ErrorClass, PaymentEntity[]>>;
   getPaymentById(id: string): Promise<Either<ErrorClass, PaymentEntity>>;
+  updatePayment(id: string, data: PaymentModel) : Promise<Either<ErrorClass, PaymentEntity>>
 }

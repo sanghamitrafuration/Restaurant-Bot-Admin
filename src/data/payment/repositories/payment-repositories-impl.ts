@@ -25,6 +25,18 @@ export class PaymentRepositoryImpl implements PaymentRepository {
     }
   }
 
+  async updatePayment(id:string, data:PaymentModel) : Promise<Either<ErrorClass, PaymentEntity>> {
+    try {
+        let i= await this.dataSource.update(id, data);
+        return Right<ErrorClass, PaymentEntity>(i);
+    } catch (error) {
+        if (error instanceof ApiError && error.name === "conflict") {
+            return Left<ErrorClass, PaymentEntity>(ApiError.emailExist());
+        }
+        return Left<ErrorClass, PaymentEntity>(ApiError.badRequest());
+    }
+  }
+
   async getPayments() : Promise<Either<ErrorClass, PaymentEntity[]>> {
     try {
         let i= await this.dataSource.getAllPayment();
