@@ -1,16 +1,12 @@
-import { NextFunction, Request, Response } from "express";
-import ApiError from "@presentation/error-handling/api-error";
+import { Request, Response } from "express";
 import { Either } from "monet";
 import ErrorClass from "@presentation/error-handling/api-error";
-import env from "@main/config/env";
 import { CreateAdminUsecase } from "@domain/admin/usecases/create-admin";
 import { DeleteAdminUsecase } from "@domain/admin/usecases/delete-admin";
 import { GetAdminByIdUsecase } from "@domain/admin/usecases/get-admin-by-id";
 import { GetAllAdminsUsecase } from "@domain/admin/usecases/get-all-admins";
 import { UpdateAdminUsecase } from "@domain/admin/usecases/update-admin";
 import { AdminEntity, AdminMapper, AdminModel } from "@domain/admin/entities/admin";
-const bcrypt= require("bcrypt");
-const jwt= require("jsonwebtoken");
 
 export class AdminServices {
   private readonly createAdminUsecases: CreateAdminUsecase;
