@@ -15,7 +15,7 @@ export default (app: Express): void => {
 
   app.use(router);
   app.use("/api/v1/user",userRouter);
-  // app.use(validator);
+  app.use(validator);
   app.use("/api/v1/admin", adminRouter);
   app.use("/api/v1/payment", paymentRouter);
 
