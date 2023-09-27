@@ -10,7 +10,7 @@ export default (app: Express): void => {
   const router = Router();
 
   app.get("/restaurant", (req, res) => {
-    res.status(200).json({ message: "Welcome to Akina",});
+    res.status(200).json({ message: "Welcome to Business bot",});
   });
 
   app.use(router);
