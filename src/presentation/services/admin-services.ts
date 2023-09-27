@@ -17,7 +17,7 @@ export class AdminServices {
 
   constructor(
     createAdminUsecases: CreateAdminUsecase,
-    deleteAdminUsecases: DeleteAdminUsecase,
+    deleteAdminUsecases: DeleteAdminUsecase, 
     getAdminByIdUsecases: GetAdminByIdUsecase,
     getAllAdminsUsecases: GetAllAdminsUsecase,
     updateAdminUsecases: UpdateAdminUsecase
