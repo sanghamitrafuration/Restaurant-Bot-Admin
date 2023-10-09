@@ -9,7 +9,7 @@ import validator from "@presentation/middleware/validator.middleware";
 export default (app: Express): void => {
   const router = Router();
 
-  app.get("/restaurant", (req, res) => {
+  app.get("/business", (req, res) => {
     res.status(200).json({ message: "Welcome to Business bot"});
   });
 

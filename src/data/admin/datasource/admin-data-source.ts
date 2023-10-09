@@ -16,7 +16,7 @@ export interface AdminDataSource {
 export class AdminDataSourceImpl implements AdminDataSource {
   constructor(private db: mongoose.Connection) {}
   async create(admin: AdminModel): Promise<any> {
-    const existingAdmin = await Admin.findOne({ userId: admin.userId });
+    const existingAdmin = await Admin.findOne({ email: admin.email });
     if (existingAdmin) {
       throw ApiError.emailExist();
     }
