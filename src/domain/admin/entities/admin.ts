@@ -37,6 +37,10 @@ export class AdminModel {
         if (existingAdmin != null) {
           return {
             ...existingAdmin,
+            id:
+            adminData._id !== undefined
+                ? adminData._id
+                : existingAdmin.id,
             name:
             adminData.name !== undefined
                 ? adminData.name
