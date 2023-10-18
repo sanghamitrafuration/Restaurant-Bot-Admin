@@ -14,7 +14,7 @@ export class AdminModel {
   
   export class AdminEntity {
     constructor(
-      public id: string | undefined = undefined,
+      public id: string | undefined = "",
       public name: string = "",
       public phone: string = "",
       public email: string = "",
