@@ -80,7 +80,7 @@ export class AdminServices {
             res.status(error.status).json({ error: error.message }),
         (result: AdminEntity[]) => {
             const resdata = result.map((admin) =>
-            AdminMapper.toModel(admin)
+            AdminMapper.toEntity(admin)
           );
           return res.json(resdata);
         }
